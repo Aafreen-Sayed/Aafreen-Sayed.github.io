@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aafreen Sayed — Computational Genomics &amp; Structural Bioinformatics</title>
+<meta name="description" content="Portfolio of Aafreen Sayed — Computational Genomics & Structural Bioinformatics Researcher, Mumbai, India." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          void: '#090d16',
+          panel: '#0f172a',
+          hairline: '#1e293b',
+          cyanx: '#22d3ee',
+          emeraldx: '#34d399',
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html, body { background-color: #090d16; }
+  body { font-family: 'Inter', sans-serif; }
+  ::selection { background: rgba(34,211,238,0.25); color: #ecfeff; }
+
+  #dna-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .content-layer { position: relative; z-index: 10; }
+
+  .glow-text {
+    text-shadow: 0 0 24px rgba(34,211,238,0.35);
+  }
+
+  .card {
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(51, 65, 85, 0.6);
+  }
+  .card:hover {
+    border-color: rgba(34, 211, 238, 0.35);
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.08), 0 12px 40px -12px rgba(34,211,238,0.15);
+  }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+  }
+
+  .seq-track {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.4em;
+    white-space: nowrap;
+    animation: seq-scroll 60s linear infinite;
+  }
+  @keyframes seq-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid #22d3ee;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .seq-track { animation: none; }
+  }
+</style>
+</head>
+
+<body class="bg-void text-slate-200 antialiased">
+
+<canvas id="dna-canvas" aria-hidden="true"></canvas>
+
+<div class="content-layer">
+
+  <!-- NAV -->
+  <header class="fixed top-0 inset-x-0 z-50 border-b border-hairline/70 bg-void/70 backdrop-blur-md">
+    <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-6">
+      <a href="#top" class="font-display font-semibold tracking-tight text-slate-100 text-lg shrink-0">
+        AS<span class="text-cyanx">.</span>
+      </a>
+      <div class="nav-scroll flex items-center gap-6 overflow-x-auto whitespace-nowrap text-sm font-mono text-slate-400">
+        <a href="#about" class="hover:text-cyanx transition-colors">about</a>
+        <a href="#projects" class="hover:text-cyanx transition-colors">projects</a>
+        <a href="#publications" class="hover:text-cyanx transition-colors">publications</a>
+        <a href="#experience" class="hover:text-cyanx transition-colors">experience</a>
+        <a href="#skills" class="hover:text-cyanx transition-colors">skills</a>
+        <a href="#education" class="hover:text-cyanx transition-colors">education</a>
+        <a href="mailto:aafreensayed73@gmail.com" class="hidden sm:inline text-emeraldx hover:text-emerald-300 transition-colors">contact →</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" class="relative min-h-screen flex items-center pt-16">
+    <div id="hero" class="max-w-6xl mx-auto px-5 sm:px-8 py-20 w-full">
+      <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-6">
+        &gt; sequencing_identity.run()
+      </p>
+      <h1 class="font-display font-bold text-5xl sm:text-6xl md:text-7xl leading-[1.05] text-slate-50 glow-text">
+        Aafreen Sayed
+      </h1>
+      <h2 class="mt-4 font-display font-medium text-xl sm:text-2xl text-cyanx">
+        Computational Genomics &amp; Structural Bioinformatics Researcher
+      </h2>
+      <p class="mt-2 font-mono text-sm text-slate-500">
+        Mumbai, Maharashtra, India
+      </p>
+      <p class="mt-8 max-w-2xl text-base sm:text-lg text-slate-400 leading-relaxed">
+        Biotechnology Master's student specializing in computational genomics, structural bioinformatics,
+        and generative protein design. Experience spans transcriptomic profiling, molecular docking,
+        homology modeling, and reverse vaccinology — moving between the physical structure of a molecule
+        and the digital sequence that encodes it.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        <a href="mailto:aafreensayed73@gmail.com"
+           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-cyanx/10 border border-cyanx/30 text-cyanx text-sm font-mono hover:bg-cyanx/20 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg>
+          email
+        </a>
+        <a href="https://linkedin.com/in/aafreen-sayed73" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-panel border border-hairline text-slate-300 text-sm font-mono hover:border-cyanx/40 hover:text-cyanx transition-colors">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          linkedin
+        </a>
+        <a href="https://github.com/Aafreen-Sayed" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-panel border border-hairline text-slate-300 text-sm font-mono hover:border-cyanx/40 hover:text-cyanx transition-colors">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.17c-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.69.42.36.78 1.08.78 2.18v3.23c0 .31.21.68.8.56A10.99 10.99 0 0 0 23.5 12c0-6.27-5.23-11.5-11.5-11.5z"/></svg>
+          github
+        </a>
+        <a href="https://orcid.org/0009-0009-0688-8577" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-panel border border-hairline text-slate-300 text-sm font-mono hover:border-emeraldx/40 hover:text-emeraldx transition-colors">
+          <span class="w-4 h-4 rounded-full bg-emeraldx text-void text-[9px] font-bold flex items-center justify-center">iD</span>
+          orcid
+        </a>
+      </div>
+    </div>
+
+    <div class="absolute bottom-8 inset-x-0 flex justify-center">
+      <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-slate-600 animate-pulse">scroll — physical to digital</span>
+    </div>
+  </section>
+
+  <div class="seq-divider overflow-hidden py-3 border-y border-hairline/60">
+    <div class="seq-track inline-block text-slate-700 text-[11px]">ATCGGCTAATGCCGTAGCTTACGGATCCGTAAGCTCGATGCATCGGTACGATCGATCGGCATCGTACGATCGGCATTAGCCGATCGTATCGGCTAATGCCGTAGCTTACGGATCCGTAAGCTCGATGCATCGGTACGATCGATCGGCATCGTACGATCGGCATTAGCCGATCGTA</div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about" class="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+    <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-3">about</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-50 max-w-2xl">
+      Research focus, across three registers
+    </h2>
+    <p class="mt-4 max-w-2xl text-slate-400">
+      Work moves between the wet lab, the structural model, and the classroom — three ways of asking
+      the same question about a gene or a protein.
+    </p>
+
+    <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="card rounded-2xl p-7">
+        <div class="w-10 h-10 rounded-lg bg-cyanx/10 border border-cyanx/30 flex items-center justify-center mb-5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12c2-4 6-6 8-2s6 2 8-2M4 6c2-4 6-6 8-2s6 2 8-2M4 18c2-4 6-6 8-2s6 2 8-2"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">Computational Genomics &amp; Transcriptomics</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          Differential gene expression and stage-wise disease profiling in R, using limma and the
+          Bioconductor ecosystem across public GEO datasets.
+        </p>
+      </div>
+
+      <div class="card rounded-2xl p-7">
+        <div class="w-10 h-10 rounded-lg bg-emeraldx/10 border border-emeraldx/30 flex items-center justify-center mb-5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">Structural &amp; Generative Biology</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          Protein structure prediction and de novo design with AlphaFold2 and RFDiffusion, virtual
+          screening and docking analysis in PyMOL.
+        </p>
+      </div>
+
+      <div class="card rounded-2xl p-7">
+        <div class="w-10 h-10 rounded-lg bg-cyanx/10 border border-cyanx/30 flex items-center justify-center mb-5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5C7 4.5 3 8 2 12c1 4 5 7.5 10 7.5S21 16 22 12c-1-4-5-7.5-10-7.5zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">Translational &amp; Educational Content</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          Translating pipelines into teachable material — workshop design and hands-on instruction
+          in transcriptomic data analysis.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+    <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-3">research projects</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-50 max-w-2xl">
+      Six pipelines, one question at a time
+    </h2>
+
+    <div class="mt-12 grid md:grid-cols-2 gap-5">
+
+      <article class="card rounded-2xl p-7 md:col-span-2">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <span class="tag text-cyanx bg-cyanx/10 border border-cyanx/25 rounded-full px-2.5 py-1">generative protein design</span>
+          <span class="font-mono text-xs text-slate-500">independent research · 2026 – ongoing</span>
+        </div>
+        <h3 class="font-display font-semibold text-xl text-slate-100">AI-Designed Synthetic Developmental Factors for Cancer Reversion</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed max-w-3xl">
+          Exploring synthetic neo-factors for cancer phenotypic reversion using AlphaFold2, RFDiffusion,
+          ProteinMPNN, and ESM2, with a provisional patent filing planned.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">AlphaFold2</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">RFDiffusion</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">ESM2</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Cancer Biology</span>
+        </div>
+      </article>
+
+      <article class="card rounded-2xl p-7">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <span class="tag text-emeraldx bg-emeraldx/10 border border-emeraldx/25 rounded-full px-2.5 py-1">transcriptomics</span>
+          <span class="font-mono text-xs text-slate-500">2026</span>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">Stage-Wise Evolutionary Analysis of Lung Adenocarcinoma (LUAD)</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          A custom computational pipeline characterizing transcriptomic shifts across disease
+          progression stages using 10 public GEO datasets. Presented at RSM 3.0.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">R</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">limma</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">ggplot2</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">GEO Datasets</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Biomarkers</span>
+        </div>
+      </article>
+
+      <article class="card rounded-2xl p-7">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <span class="tag text-cyanx bg-cyanx/10 border border-cyanx/25 rounded-full px-2.5 py-1">virtual screening</span>
+          <span class="font-mono text-xs text-slate-500">2026</span>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">Molecular Dynamics &amp; Virtual Screening of NLRP9 Inhibitors</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          Virtual screening of <em class="not-italic text-slate-300">Withania somnifera</em> phytochemicals
+          against NLRP9-PYD using SWISS-MODEL, AutoDock Vina, and Ramachandran analysis.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">AutoDock Vina</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">SWISS-MODEL</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Molecular Docking</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">ADMET</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">PyMOL</span>
+        </div>
+      </article>
+
+      <article class="card rounded-2xl p-7">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <span class="tag text-emeraldx bg-emeraldx/10 border border-emeraldx/25 rounded-full px-2.5 py-1">immunoinformatics</span>
+          <span class="font-mono text-xs text-slate-500">b.sc. dissertation · 2025</span>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">Reverse Vaccinology for Human Metapneumovirus (hMPV)</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          An in silico multi-epitope vaccine design pipeline built on immunoinformatics tools and
+          protein–protein docking.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Reverse Vaccinology</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">VaxiJen</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">ClusPro</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">PyMOL</span>
+        </div>
+      </article>
+
+      <article class="card rounded-2xl p-7">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <span class="tag text-cyanx bg-cyanx/10 border border-cyanx/25 rounded-full px-2.5 py-1">gene editing</span>
+          <span class="font-mono text-xs text-slate-500">2026</span>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">In Silico sgRNA Design for CRISPR/Cas9-Mediated MLO Mutagenesis</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          A workflow targeting the VvMLO7 gene in grapevine to reduce powdery mildew susceptibility,
+          built around CHOPCHOP v3.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">CRISPR/Cas9</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">CHOPCHOP</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Vector Design</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Plant Biotechnology</span>
+        </div>
+      </article>
+
+      <article class="card rounded-2xl p-7">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+          <span class="tag text-emeraldx bg-emeraldx/10 border border-emeraldx/25 rounded-full px-2.5 py-1">comparative genomics</span>
+          <span class="font-mono text-xs text-slate-500">2025</span>
+        </div>
+        <h3 class="font-display font-semibold text-lg text-slate-100">COVID-Cardio Genomic Analysis</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+          An in silico comparative genomics study investigating cardiovascular implications of
+          SARS-CoV-2. Presented at ICCAS-25.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Comparative Genomics</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Viral Genomics</span>
+          <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-2.5 py-1">Data Analysis</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="seq-divider overflow-hidden py-3 border-y border-hairline/60">
+    <div class="seq-track inline-block text-slate-700 text-[11px]">GATCCGTAAGCTCGATGCATCGGTACGATCGATCGGCATCGTACGATCGGCATTAGCCGATCGTATCGGCTAATGCCGTAGCTTACGGATCCGTAAGCTCGATGCATCGGTACGATCGATCGGCATCGTACGATCGGCATTAGCCGATCGTAGATCCGTAAGCTCGATGCATCGG</div>
+  </div>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications" class="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+    <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-3">publications</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-50 max-w-2xl">Preprints &amp; peer review</h2>
+
+    <div class="mt-12 card rounded-2xl p-7 sm:p-8">
+      <span class="tag text-amber-300 bg-amber-400/10 border border-amber-400/25 rounded-full px-2.5 py-1">under review</span>
+      <h3 class="mt-4 font-display font-semibold text-lg sm:text-xl text-slate-100 leading-snug">
+        Beyond Anti-Nutrients: Potential Health Benefits of Tannins and Glycosides as Functional
+        Secondary Metabolites
+      </h3>
+      <p class="mt-3 text-sm text-slate-400">
+        Dokhale, S., <span class="text-slate-200 font-medium">Sayed, A.</span>, Garse, S., Balaji, S.
+      </p>
+      <p class="mt-1 text-sm text-slate-500 font-mono">
+        International Journal of Food Properties (Taylor &amp; Francis) — Special Issue on Functional Foods
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+    <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-3">experience &amp; instruction</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-50 max-w-2xl">On the bench, and at the front of the room</h2>
+
+    <div class="mt-12 space-y-5">
+      <div class="card rounded-2xl p-7 sm:p-8 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
+        <span class="font-mono text-xs text-cyanx shrink-0 sm:w-40">May 2026 — Present</span>
+        <div>
+          <h3 class="font-display font-semibold text-lg text-slate-100">Bioinformatics Research Intern</h3>
+          <p class="font-mono text-sm text-slate-500 mt-0.5">Omics Nexus</p>
+          <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+            Developing R-based workshop materials and instructional content for differential gene
+            expression analysis.
+          </p>
+        </div>
+      </div>
+
+      <div class="card rounded-2xl p-7 sm:p-8 flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
+        <span class="font-mono text-xs text-emeraldx shrink-0 sm:w-40">June 2025 &amp; March 2026</span>
+        <div>
+          <h3 class="font-display font-semibold text-lg text-slate-100">Bioinformatics Workshop Facilitator</h3>
+          <p class="font-mono text-sm text-slate-500 mt-0.5">Microarray Data Analysis Workshop</p>
+          <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+            Designed R scripts (limma, ggplot2) and trained 50+ participants in hands-on data
+            preprocessing and visualization.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+    <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-3">technical skills</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-50 max-w-2xl">From wet lab to workstation</h2>
+
+    <div class="mt-12 grid sm:grid-cols-2 gap-5">
+      <div class="card rounded-2xl p-7">
+        <h3 class="font-mono text-xs uppercase tracking-widest text-cyanx mb-4">Computational Genomics</h3>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>Transcriptomics (DGE)</li>
+          <li>CRISPR-Cas9 Design</li>
+          <li>Reverse Vaccinology</li>
+          <li>Microarray Analysis</li>
+        </ul>
+      </div>
+      <div class="card rounded-2xl p-7">
+        <h3 class="font-mono text-xs uppercase tracking-widest text-emeraldx mb-4">Structural &amp; Generative Biology</h3>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>Molecular Dynamics &amp; Virtual Screening</li>
+          <li>Protein Docking, PyMOL</li>
+          <li>AlphaFold2, RFDiffusion</li>
+          <li>ProteinMPNN, ESM2</li>
+        </ul>
+      </div>
+      <div class="card rounded-2xl p-7">
+        <h3 class="font-mono text-xs uppercase tracking-widest text-cyanx mb-4">Bioinformatics &amp; Code</h3>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>R — Advanced (limma, Bioconductor, ggplot2)</li>
+          <li>Python</li>
+          <li>Bash / Linux</li>
+        </ul>
+      </div>
+      <div class="card rounded-2xl p-7">
+        <h3 class="font-mono text-xs uppercase tracking-widest text-emeraldx mb-4">Wet-Lab / Molecular Biology</h3>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>Real-time PCR (qRT-PCR)</li>
+          <li>Gene Cloning</li>
+          <li>Gel Electrophoresis</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+    <p class="font-mono text-xs tracking-[0.25em] uppercase text-emeraldx mb-3">education &amp; certifications</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-50 max-w-2xl">Training record</h2>
+
+    <div class="mt-12 grid md:grid-cols-2 gap-5">
+      <div class="card rounded-2xl p-7">
+        <span class="font-mono text-xs text-cyanx">2025 – 2027</span>
+        <h3 class="mt-2 font-display font-semibold text-lg text-slate-100">M.Sc. Biotechnology</h3>
+        <p class="mt-1 text-sm text-slate-400">B. K. Birla College</p>
+        <p class="mt-1 text-sm font-mono text-slate-500">CGPA: 8.4 / 10</p>
+      </div>
+      <div class="card rounded-2xl p-7">
+        <span class="font-mono text-xs text-emeraldx">2022 – 2025</span>
+        <h3 class="mt-2 font-display font-semibold text-lg text-slate-100">B.Sc. Biotechnology</h3>
+        <p class="mt-1 text-sm text-slate-400">B. K. Birla College</p>
+        <p class="mt-1 text-sm font-mono text-slate-500">CGPA: 9.43 / 10</p>
+      </div>
+    </div>
+
+    <div class="mt-5 card rounded-2xl p-7">
+      <h3 class="font-mono text-xs uppercase tracking-widest text-slate-400 mb-4">Certifications</h3>
+      <div class="flex flex-wrap gap-2">
+        <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-3 py-1.5">Genomic Data Science — Johns Hopkins / Coursera</span>
+        <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-3 py-1.5">Python for Biologists</span>
+        <span class="tag text-slate-300 bg-white/5 border border-hairline rounded-full px-3 py-1.5">Structural Bioinformatics</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-hairline/70 mt-8">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <p class="font-mono text-xs text-slate-600">© 2026 Aafreen Sayed. Built from atoms, read as sequence.</p>
+      <div class="flex items-center gap-5 text-sm font-mono text-slate-400">
+        <a href="mailto:aafreensayed73@gmail.com" class="hover:text-cyanx transition-colors">email</a>
+        <a href="https://linkedin.com/in/aafreen-sayed73" target="_blank" rel="noopener noreferrer" class="hover:text-cyanx transition-colors">linkedin</a>
+        <a href="https://github.com/Aafreen-Sayed" target="_blank" rel="noopener noreferrer" class="hover:text-cyanx transition-colors">github</a>
+        <a href="https://orcid.org/0009-0009-0688-8577" target="_blank" rel="noopener noreferrer" class="hover:text-emeraldx transition-colors">orcid</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('dna-canvas');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W, H;
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const NUCLEOTIDES = ['A', 'T', 'G', 'C'];
+  const STRAND_POINTS = 92;
+  const HELIX_RADIUS = 130;
+  const VERTICAL_SPACING = 15;
+  const TOTAL_HEIGHT = STRAND_POINTS * VERTICAL_SPACING;
+  const FOCAL = 420;
+
+  // The helix axis is tilted diagonally across the screen (rather than
+  // running straight down the center) so a longer run of it is visible in
+  // the viewport at once — a tilted line covers more of a rectangular frame
+  // than a vertical one of the same length.
+  const TILT_ANGLE = -24 * (Math.PI / 180);
+  const TILT_COS = Math.cos(TILT_ANGLE);
+  const TILT_SIN = Math.sin(TILT_ANGLE);
+
+  // Watson-Crick complements. Bond count follows the real hydrogen-bond
+  // number: A=T has 2, G≡C has 3.
+  const COMPLEMENT = { A: 'T', G: 'C', T: 'A', C: 'G' };
+  const BONDS = { A: 2, T: 2, G: 3, C: 3 };
+  const BASES = ['A', 'G', 'T', 'C'];
+
+  // Purines (A, G) get one colour, pyrimidines (T, C) the other. Because a
+  // purine only ever pairs with a pyrimidine, the two ends of every rung are
+  // always different colours automatically.
+  const PURINE_RGB = '96,165,250';    // blue — A, G
+  const PYRIMIDINE_RGB = '52,211,153'; // green — T, C
+  function baseColor(nuc) {
+    return nuc === 'A' || nuc === 'G' ? PURINE_RGB : PYRIMIDINE_RGB;
+  }
+
+  // Backbone angular offset. 180° would put both strands directly opposite
+  // each other with two identical grooves; real B-DNA backbones sit closer
+  // to ~144°/216° apart, producing an asymmetric major/minor groove pair.
+  const STRAND_OFFSET = Math.PI * 0.8;
+
+  const pairs = [];
+  for (let i = 0; i < STRAND_POINTS; i++) {
+    const base = BASES[Math.floor(Math.random() * BASES.length)];
+    pairs.push({
+      i,
+      type: { a: base, b: COMPLEMENT[base], bonds: BONDS[base] },
+      floatSeed: Math.random() * Math.PI * 2,
+      floatSpeed: 0.4 + Math.random() * 0.4,
+    });
+  }
+
+  let rotation = 0;
+  let scrollFrac = 0;
+  let globalOpacity = 1;
+
+  function updateScroll() {
+    const heroEl = document.getElementById('hero');
+    const heroH = heroEl ? heroEl.offsetHeight : window.innerHeight;
+    const morphDistance = heroH * 1.1;
+    const y = window.scrollY;
+
+    scrollFrac = Math.min(1, Math.max(0, y / morphDistance));
+
+    const fadeStart = heroH * 1.3;
+    const fadeEnd = heroH * 3.2;
+    if (y > fadeStart) {
+      globalOpacity = Math.max(0.14, 1 - ((y - fadeStart) / (fadeEnd - fadeStart)) * 0.86);
+    } else {
+      globalOpacity = 1;
+    }
+  }
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  updateScroll();
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, W, H);
+
+    if (!reduceMotion) rotation += 0.0022;
+
+    // Anchor the axis toward the right two-thirds of the screen on wider
+    // viewports so it stays clear of the left-aligned hero copy; on narrow
+    // (mobile) viewports there's no room to spare, so keep it centered.
+    const cx = W < 768 ? W / 2 : W * 0.66;
+    const cy = H * 0.46 + scrollFrac * 30;
+
+    // Project both backbone strands for every pair index.
+    const proj = pairs.map((pair) => {
+      const floatY = reduceMotion ? 0 : Math.sin(time * 0.001 * pair.floatSpeed + pair.floatSeed) * scrollFrac * 10;
+      const baseY = pair.i * VERTICAL_SPACING - TOTAL_HEIGHT / 2 + floatY;
+
+      const points = [0, 1].map((s) => {
+        const angle = pair.i * 0.24 + (s === 0 ? 0 : STRAND_OFFSET) + rotation;
+        const x = Math.cos(angle) * HELIX_RADIUS;
+        const z = Math.sin(angle) * HELIX_RADIUS;
+        const scale = FOCAL / (FOCAL - z);
+
+        // Rotate the (radial offset, axis position) pair by the tilt angle
+        // so the whole ladder runs diagonally instead of straight down.
+        const tiltedX = x * TILT_COS - baseY * TILT_SIN;
+        const tiltedY = x * TILT_SIN + baseY * TILT_COS;
+
+        return {
+          strand: s,
+          z,
+          scale,
+          screenX: cx + tiltedX * scale,
+          screenY: cy + tiltedY * scale,
+          nucleotide: s === 0 ? pair.type.a : pair.type.b,
+        };
+      });
+
+      return { points, bonds: pair.type.bonds };
+    });
+
+    // Build a single depth-sorted draw queue so backbones, rungs and
+    // nucleotide nodes interleave correctly as the helix rotates.
+    const drawables = [];
+
+    // Backbone segments (sugar-phosphate strands).
+    for (let s = 0; s < 2; s++) {
+      for (let i = 0; i < proj.length - 1; i++) {
+        const p0 = proj[i].points[s];
+        const p1 = proj[i + 1].points[s];
+        const z = (p0.z + p1.z) / 2;
+        const scale = (p0.scale + p1.scale) / 2;
+        drawables.push({
+          z,
+          draw: () => drawBackboneSegment(p0, p1, scale),
+        });
+      }
+    }
+
+    // Base-pair rungs.
+    for (const pair of proj) {
+      const [p0, p1] = pair.points;
+      const z = (p0.z + p1.z) / 2;
+      const scale = (p0.scale + p1.scale) / 2;
+      drawables.push({
+        z,
+        draw: () => drawRung(p0, p1, scale, pair.bonds),
+      });
+    }
+
+    // Nucleotide nodes / letters.
+    for (const pair of proj) {
+      for (const p of pair.points) {
+        drawables.push({
+          z: p.z,
+          draw: () => drawNode(p, baseColor(p.nucleotide)),
+        });
+      }
+    }
+
+    drawables.sort((a, b) => a.z - b.z);
+    for (const d of drawables) d.draw();
+
+    drawLeftContrastMask();
+
+    requestAnimationFrame(draw);
+  }
+
+  // A soft dark gradient hugging the left edge, independent of helix
+  // geometry, so headings/copy that sit directly on the canvas (hero,
+  // section eyebrows, footer) stay legible regardless of how the diagonal
+  // strand happens to fall.
+  function drawLeftContrastMask() {
+    const maskWidth = Math.min(620, W * 0.58);
+    const grad = ctx.createLinearGradient(0, 0, maskWidth, 0);
+    grad.addColorStop(0, `rgba(9,13,22,${0.55 * globalOpacity})`);
+    grad.addColorStop(1, 'rgba(9,13,22,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, maskWidth, H);
+  }
+
+  // Depth cue: everything dims and shrinks slightly as it swings toward the
+  // back of the rotation (small scale = far from camera = deep in a groove).
+  function depthFactor(scale) {
+    return Math.min(1, Math.max(0.18, (scale - 0.7) / 0.85));
+  }
+
+  function drawBackboneSegment(p0, p1, scale) {
+    const df = depthFactor(scale);
+    const alpha = (1 - scrollFrac) * 0.55 * df * globalOpacity;
+    if (alpha <= 0.01) return;
+
+    const rgb0 = baseColor(p0.nucleotide);
+    const rgb1 = baseColor(p1.nucleotide);
+    const grad = ctx.createLinearGradient(p0.screenX, p0.screenY, p1.screenX, p1.screenY);
+    grad.addColorStop(0, `rgba(${rgb0},${alpha})`);
+    grad.addColorStop(1, `rgba(${rgb1},${alpha})`);
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2.4 * scale;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = `rgba(${rgb0},${alpha})`;
+    ctx.shadowBlur = 6 * df;
+    ctx.beginPath();
+    ctx.moveTo(p0.screenX, p0.screenY);
+    ctx.lineTo(p1.screenX, p1.screenY);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  function drawRung(p0, p1, scale, bonds) {
+    const df = depthFactor(scale);
+
+    // Physical phase: small molecular nodes beaded along the rung.
+    const physicalAlpha = (1 - scrollFrac) * 0.65 * df * globalOpacity;
+    if (physicalAlpha > 0.015) {
+      ctx.strokeStyle = `rgba(148,163,184,${physicalAlpha * 0.5})`;
+      ctx.lineWidth = 1 * scale;
+      ctx.beginPath();
+      ctx.moveTo(p0.screenX, p0.screenY);
+      ctx.lineTo(p1.screenX, p1.screenY);
+      ctx.stroke();
+
+      for (let b = 1; b <= bonds; b++) {
+        const t = b / (bonds + 1);
+        const nx = lerp(p0.screenX, p1.screenX, t);
+        const ny = lerp(p0.screenY, p1.screenY, t);
+        const r = 1.6 * scale;
+        ctx.fillStyle = `rgba(226,232,240,${physicalAlpha})`;
+        ctx.beginPath();
+        ctx.arc(nx, ny, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Digital phase: dashed hydrogen-bond line, one dash per bond. Colour
+    // it with a gradient between the two true partner colours (instead of
+    // a flat neutral tone) so the actual pairing is unmistakable even when
+    // other, unrelated nodes happen to sit nearby on screen.
+    const digitalAlpha = Math.min(1, scrollFrac * 0.8 * df * globalOpacity);
+    if (digitalAlpha > 0.015) {
+      const dx = p1.screenX - p0.screenX;
+      const dy = p1.screenY - p0.screenY;
+      const len = Math.hypot(dx, dy);
+      const margin = len * 0.22;
+      const usable = len - margin * 2;
+      const segments = bonds * 2 - 1;
+      const dashLen = usable / segments;
+
+      const rgb0 = baseColor(p0.nucleotide);
+      const rgb1 = baseColor(p1.nucleotide);
+      const lineGrad = ctx.createLinearGradient(p0.screenX, p0.screenY, p1.screenX, p1.screenY);
+      lineGrad.addColorStop(0, `rgba(${rgb0},${digitalAlpha})`);
+      lineGrad.addColorStop(1, `rgba(${rgb1},${digitalAlpha})`);
+
+      ctx.strokeStyle = lineGrad;
+      ctx.lineWidth = Math.max(1.2, 1.6 * scale);
+      const ux = dx / len;
+      const uy = dy / len;
+      const startX = p0.screenX + ux * margin;
+      const startY = p0.screenY + uy * margin;
+
+      for (let seg = 0; seg < segments; seg += 2) {
+        const t0 = seg * dashLen;
+        const t1 = (seg + 1) * dashLen;
+        ctx.beginPath();
+        ctx.moveTo(startX + ux * t0, startY + uy * t0);
+        ctx.lineTo(startX + ux * t1, startY + uy * t1);
+        ctx.stroke();
+      }
+    }
+  }
+
+  function drawNode(p, rgb) {
+    const df = depthFactor(p.scale);
+    const alphaBase = 0.35 + p.scale * 0.55;
+    const sphereAlpha = (1 - scrollFrac) * alphaBase * df * globalOpacity;
+    const letterAlpha = scrollFrac * alphaBase * df * globalOpacity;
+
+    if (sphereAlpha > 0.015) {
+      const r = (4.5 * p.scale + 1.5) * df;
+      const grad = ctx.createRadialGradient(p.screenX, p.screenY, 0, p.screenX, p.screenY, r * 3.2);
+      grad.addColorStop(0, `rgba(${rgb},${sphereAlpha})`);
+      grad.addColorStop(1, `rgba(${rgb},0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.screenX, p.screenY, r * 3.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = `rgba(${rgb},${Math.min(1, sphereAlpha * 1.4)})`;
+      ctx.beginPath();
+      ctx.arc(p.screenX, p.screenY, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    if (letterAlpha > 0.015) {
+      const fontSize = (13 * p.scale + 5) * df;
+      ctx.font = `600 ${fontSize}px 'IBM Plex Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = `rgba(${rgb},${letterAlpha})`;
+      ctx.shadowBlur = 9 * df;
+      ctx.fillStyle = `rgba(${rgb},${letterAlpha})`;
+      ctx.fillText(p.nucleotide, p.screenX, p.screenY);
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>
