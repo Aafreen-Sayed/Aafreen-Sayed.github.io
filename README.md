@@ -1,5 +1,5 @@
 # Aafreen-Sayed.github.io
 
-Researcher in Computational Genomics & Bioinformatics specializing in transcriptomics, differential gene expression (DGE) analysis, molecular modeling, and in-silico vaccine design pipelines.
+M.Sc. Biotechnology | Computational Biology & Structural Bioinformatics | Exploring constraint-informed protein design. Research focused on how biological constraints can be systematically incorporated into generative protein design workflows. R, Python
 
 🌐 **Live Portfolio:** [aafreen-sayed.github.io](https://aafreen-sayed.github.io)
